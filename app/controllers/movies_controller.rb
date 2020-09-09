@@ -13,9 +13,12 @@ class MoviesController < ApplicationController
   def index
     #session !nil params nil then redirect_to action: :sort=> , :ratings=>
     @all_ratings = Movie.all_ratings # controller sets this variable by consulting the Model
+    
     (params[:sort]) ? (@sort = params[:sort]) : (@sort = session[:sort])
-    @ratings = params[:ratings] || session[:ratings]
+    (params[:ratings]) ? (@ratings = params[:ratings]) : (@ratings= session[:ratings])
+    
     @ratings ||= Hash[@all_ratings.collect { |item| [item, 1] } ]#array map to hash
+    
     session[:sort] = @sort
     session[:ratings] = @ratings 
     
