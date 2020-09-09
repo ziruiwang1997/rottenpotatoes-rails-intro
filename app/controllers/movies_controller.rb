@@ -17,7 +17,7 @@ class MoviesController < ApplicationController
     (params[:sort]) ? (@sort = params[:sort]) : (@sort = session[:sort])
     (params[:ratings]) ? (@ratings = params[:ratings]) : (@ratings= session[:ratings])
     
-    @ratings = Hash[@all_ratings.map{ |x| [x, x] } ] || @ratings#array map to hash
+    @ratings = Hash[@all_ratings.map{ |x| [x, x] } ] || @ratings#if not session, map it
     session[:sort] = @sort
     session[:ratings] = @ratings 
     
