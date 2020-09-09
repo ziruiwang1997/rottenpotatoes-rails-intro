@@ -24,7 +24,7 @@ class MoviesController < ApplicationController
     @movies = Movie.with_ratings(@ratings.keys).order sort # a class-level method in the model
     #go in the model rather than exposing details of the schema to the controller
     
-    if params[:ratings].nil? 
+    if params[:ratings].nil? or params[:ratings].empty? 
       redirect_to :ratings => @ratings, :sort => sort #when params is 
     end
   end
