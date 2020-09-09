@@ -29,10 +29,7 @@ class MoviesController < ApplicationController
     @ratings ||= Hash[@all_ratings.collect { |item| [item, 1] } ]#array map to hash
     session[:sort] = @sort
     session[:ratings] = @ratings 
-    
-    @movies = Movie.with_ratings(@ratings.keys).order @sort # a class-level method in the model
-    #go in the model rather than exposing details of the schema to the controller
-    
+    @movies = Movie.where(:rating => @ratings.keys).order @sort
     if params[:ratings].nil? 
       redirect_to :ratings => @ratings, :sort => @sort #when params is 
     end
