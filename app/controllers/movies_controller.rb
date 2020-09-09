@@ -21,8 +21,8 @@ class MoviesController < ApplicationController
     session[:sort] = @sort
     session[:ratings] = @ratings 
     
-    #@movies = Movie.with_ratings(@ratings.keys).order @sort # a class-level method in the model
-    @movies = Movie.where(:rating => @ratings).order(@sort)
+    @movies = Movie.with_ratings(@ratings.keys).order @sort # a class-level method in the model
+    
     #go in the model rather than exposing details of the schema to the controller
     
     if params[:ratings].nil? 
