@@ -11,22 +11,20 @@ class MoviesController < ApplicationController
   end
 
   def index
-    #session !nil params nil then redirect_to action: :sort=> , :ratings=>
-    @all_ratings = Movie.all_ratings # controller sets this variable by consulting the Model
+
+    all_ratings = Movie.all_ratings 
     
-    (params[:sort]) ? (@sort = params[:sort]) : (@sort = session[:sort])
-    (params[:ratings]) ? (@ratings = params[:ratings]) : (@ratings= session[:ratings])
+    (params[:sort]) ? (sort = params[:sort]) : (sort = session[:sort])
+    (params[:ratings]) ? (ratings = params[:ratings]) : (ratings= session[:ratings])
     
-    @ratings = Hash[@all_ratings.map{ |x| [x, x] } ] || @ratings#array map to hash
-    session[:sort] = @sort
-    session[:ratings] = @ratings 
-    
-    #@movies = Movie.with_ratings(@ratings.keys).order @sort # a class-level method in the model
-    @movies = Movie.where(:rating => @ratings.keys).order @sort
-    #go in the model rather than exposing details of the schema to the controller
-    
+    ratings = Hash[all_ratings.map{ |x| [x, x] } ] || @atings#array map to hash
+    session[:sort] = sort
+    session[:ratings] = ratings 
+
+    @movies = Movie.where(:rating => ratings.keys).order sort
+
     if params[:ratings].nil? 
-      redirect_to :ratings => @ratings, :sort => @sort #when params is 
+      redirect_to :ratings => ratings, :sort => sort #when params is 
     end
   end
 
