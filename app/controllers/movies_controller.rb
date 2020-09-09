@@ -14,19 +14,18 @@ class MoviesController < ApplicationController
     #session !nil params nil then redirect_to action: :sort=> , :ratings=>
     @all_ratings = Movie.all_ratings # controller sets this variable by consulting the Model
     
-    (params[:sort]) ? (sort = params[:sort]) : (sort = session[:sort])
+    (params[:sort]) ? (@sort = params[:sort]) : (@sort = session[:sort])
     (params[:ratings]) ? (@ratings = params[:ratings]) : (@ratings= session[:ratings])
     
-    @ratings = Hash[@all_ratings.map{ |x| [x, x] } ] || @ratings#if not session, map it
-    session[:sort] = sort
+    @ratings = Hash[@all_ratings.map{ |x| [x, x] } ] || @ratings#array map to hash
+    session[:sort] = @sort
     session[:ratings] = @ratings 
     
-    #@movies = Movie.with_ratings(@ratings.keys).order sort # a class-level method in the model
-    @movies = Movie.where(rating: @ratings.keys).order(ordering)
+    @movies = Movie.with_ratings(@ratings.keys).order @sort # a class-level method in the model
     #go in the model rather than exposing details of the schema to the controller
     
-    if params[:ratings].nil? or params[:ratings].empty? 
-      redirect_to :ratings => @ratings, :sort => sort #when params is 
+    if params[:ratings].nil? 
+      redirect_to :ratings => @ratings, :sort => @sort #when params is 
     end
   end
 
