@@ -11,21 +11,9 @@ class MoviesController < ApplicationController
   end
 
   def index
-    
-    # @all_ratings = Movie.all_ratings 
-    # (params[:sort]) ? (@sort = params[:sort]) : (@sort = session[:sort])
-    # (params[:ratings]) ? (@ratings = params[:ratings]) : (@ratings= session[:ratings])
-    # @ratings = Hash[@all_ratings.map{ |x| [x, x] } ] || @ratings#array map to hash
-    # session[:sort], session[:ratings] = @sort, @ratings 
-    # if params[:ratings].nil? 
-    #   redirect_to :ratings => @ratings, :sort => @sort #when params is 
-    # end
-    # @movies = Movie.where(:rating => @ratings.keys).order @sort
-    
-    
-    @all_ratings = Movie.all_ratings # controller sets this variable by consulting the Model
     (params[:sort]) ? (@sort = params[:sort]) : (@sort = session[:sort])
     (params[:ratings]) ? (@ratings = params[:ratings]) : (@ratings= session[:ratings])
+    @all_ratings = Movie.all_ratings 
     @ratings = @ratings ||  Hash[@all_ratings.collect { |x| [x, x] } ] 
     session[:sort] = @sort
     session[:ratings] = @ratings 
