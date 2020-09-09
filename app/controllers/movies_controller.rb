@@ -26,7 +26,7 @@ class MoviesController < ApplicationController
     @all_ratings = Movie.all_ratings # controller sets this variable by consulting the Model
     (params[:sort]) ? (@sort = params[:sort]) : (@sort = session[:sort])
     (params[:ratings]) ? (@ratings = params[:ratings]) : (@ratings= session[:ratings])
-    @ratings = @ratings ||  Hash[@all_ratings.collect { |item| [item, 1] } ] 
+    @ratings = @ratings ||  Hash[@all_ratings.collect { |x| [x, x] } ] 
     session[:sort] = @sort
     session[:ratings] = @ratings 
     @movies = Movie.where(:rating => @ratings.keys).order @sort
