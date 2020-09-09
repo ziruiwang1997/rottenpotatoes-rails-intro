@@ -10,21 +10,23 @@ class MoviesController < ApplicationController
     # will render app/views/movies/show.<extension> by default
   end
 
-  def index
-    #session !nil params nil then redirect_to action: :sort=> , :ratings=>
-    @all_ratings = Movie.all_ratings # controller sets this variable by consulting the Model
-    @sort = params[:sort] || session[:sort] 
-    @ratings = params[:ratings] || session[:ratings]
-    @ratings ||= Hash[@all_ratings.collect { |item| [item, 1] } ]#array map to hash
-    session[:sort] = @sort
-    session[:ratings] = @ratings 
-    
-    @movies = Movie.with_ratings(@ratings.keys).order @sort # a class-level method in the model
-    #go in the model rather than exposing details of the schema to the controller
-    
-    if params[:ratings].nil? 
-      redirect_to :ratings => @ratings, :sort => @sort #when params is 
+  def index 
+    sort_by = params[:sort_by] || session[:sort_by]
+    session[:sort_by] = sort_by
+    @table_header = 'hilite' if sort_by == 'title'
+    @release_date_header = 'hilite' if sort_by == 'release_date'
+    @all_ratings = Movie.ratings
+    if params.keys.include? "ratings"
+      @ratings = params[:ratings].keys if params[:ratings].is_a? Hash
+      @ratings = params[:ratings] if params[:ratings].is_a? Array
+    elsif session.keys.include? "ratings"
+      @ratings = session[:ratings]
+    else
+      @ratings=@all_ratings
     end
+    session[:ratings] = @ratings
+    redirect_to movies_path(:sort => session[:sort], :ratings => session[:ratings]) if !((params.keys.include? 'sort') || (params.keys.include? 'ratings'))
+    @movies = Movie.where(:rating => @ratings).order(sort_by)
   end
 
   def new
