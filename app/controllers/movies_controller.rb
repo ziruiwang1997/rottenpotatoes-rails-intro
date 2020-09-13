@@ -5,9 +5,8 @@ class MoviesController < ApplicationController
   end
 
   def show
-    id = params[:id] # retrieve movie ID from URI route
-    @movie = Movie.find(id) # look up movie by unique ID
-    # will render app/views/movies/show.<extension> by default
+    id = params[:id] 
+    @movie = Movie.find(id) 
   end
 
   def index
@@ -20,11 +19,13 @@ class MoviesController < ApplicationController
       redirect_to :ratings => @ratings, :sort => @sort
       @movies = Movie.where(:rating => @ratings.keys).order @sort
     end
-    @movies = Movie.where(:rating => @ratings.keys).order @sort
+    else
+      @movies = Movie.where(:rating => @ratings.keys).order @sort
+    end
   end
 
   def new
-    # default: render 'new' template
+
   end
 
   def create
